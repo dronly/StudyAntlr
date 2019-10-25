@@ -4,12 +4,18 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * This class provides an empty implementation of {@link CalculatorListener},
  * which can be extended to create a listener which only needs to handle a subset
  * of the available methods.
  */
 public class CalculatorBaseListener implements CalculatorListener {
+
+	private Queue<Double> q = new LinkedList<>();
+
 	/**
 	 * {@inheritDoc}
 	 *
@@ -17,7 +23,7 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 */
 	int result;
 	@Override public void enterProg(CalculatorParser.ProgContext ctx) {
-//		Log.info("enterProg");
+//		Log.debug("enterProg");
 
 	}
 	/**
@@ -26,7 +32,9 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitProg(CalculatorParser.ProgContext ctx) {
-//		Log.info("exitProg");
+		String result = String.valueOf(q.poll());
+		Log.debug("exitProg result is: " + result);
+		Log.info("=" + result);
 
 	}
 	/**
@@ -35,7 +43,7 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterPrintExpr(CalculatorParser.PrintExprContext ctx) {
-//		Log.info("enterPrintExpr");
+//		Log.debug("enterPrintExpr");
 
 	}
 	/**
@@ -44,7 +52,7 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPrintExpr(CalculatorParser.PrintExprContext ctx) {
-//		Log.info("exitPrintExpr");
+//		Log.debug("exitPrintExpr");
 
 	}
 	/**
@@ -53,7 +61,7 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterAssign(CalculatorParser.AssignContext ctx) {
-//		Log.info("enterAssign");
+//		Log.debug("enterAssign");
 	}
 	/**
 	 * {@inheritDoc}
@@ -61,7 +69,7 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAssign(CalculatorParser.AssignContext ctx) {
-//		Log.info("exitAssign");
+//		Log.debug("exitAssign");
 
 	}
 	/**
@@ -70,7 +78,7 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterBlank(CalculatorParser.BlankContext ctx) {
-//		Log.info("enterBlank");
+//		Log.debug("enterBlank");
 
 	}
 	/**
@@ -79,7 +87,7 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBlank(CalculatorParser.BlankContext ctx) {
-//		Log.info("exitBlank");
+//		Log.debug("exitBlank");
 
 	}
 	/**
@@ -88,7 +96,7 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterParens(CalculatorParser.ParensContext ctx) {
-//		Log.info("enterParens");
+//		Log.debug("enterParens");
 
 	}
 	/**
@@ -97,7 +105,7 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitParens(CalculatorParser.ParensContext ctx) {
-//		Log.info("exitParens");
+//		Log.debug("exitParens");
 
 	}
 	/**
@@ -106,7 +114,7 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterMulDiv(CalculatorParser.MulDivContext ctx) {
-		Log.info("enterMulDiv");
+		Log.debug("enterMulDiv");
 
 	}
 	/**
@@ -115,7 +123,7 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMulDiv(CalculatorParser.MulDivContext ctx) {
-		Log.info("exitMulDiv");
+		Log.debug("exitMulDiv");
 
 	}
 	/**
@@ -125,9 +133,9 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 */
 	@Override public void enterAddSub(CalculatorParser.AddSubContext ctx) {
 		if (ctx.op.getType() == CalculatorParser.ADD){
-			Log.info("enterAdd");
+			Log.debug("enterAdd");
 		}else if (ctx.op.getType() == CalculatorParser.SUB) {
-			Log.info("enterSub");
+			Log.debug("enterSub");
 
 		}
 	}
@@ -138,9 +146,19 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 */
 	@Override public void exitAddSub(CalculatorParser.AddSubContext ctx) {
 		if (ctx.op.getType() == CalculatorParser.ADD){
-			Log.info("exitAdd");
+			Log.debug("exitAdd");
+			Double a = q.poll();
+			Double b = q.poll();
+			if((b != null) && (a != null)){
+				q.offer(a + b);
+			}
 		}else if (ctx.op.getType() == CalculatorParser.SUB) {
-			Log.info("exitSub");
+			Log.debug("exitSub");
+			Double a = q.poll();
+			Double b = q.poll();
+			if((b != null) && (a != null)){
+				q.offer(a - b);
+			}
 
 		}
 	}
@@ -150,7 +168,7 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterId(CalculatorParser.IdContext ctx) {
-		Log.info("enterId");
+		Log.debug("enterId");
 
 	}
 	/**
@@ -159,7 +177,7 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitId(CalculatorParser.IdContext ctx) {
-		Log.info("exitId");
+		Log.debug("exitId");
 
 	}
 	/**
@@ -168,7 +186,7 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterInt(CalculatorParser.IntContext ctx) {
-//		Log.info("enterInt");
+//		Log.debug("enterInt");
 
 	}
 	/**
@@ -177,7 +195,8 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitInt(CalculatorParser.IntContext ctx) {
-		Log.info("exitInt:" + ctx.INT().getText());
+		Log.debug("exitInt:" + ctx.INT().getText());
+		q.offer(Double.valueOf(ctx.INT().getText()));
 
 	}
 
@@ -187,7 +206,7 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterEveryRule(ParserRuleContext ctx) {
-//		Log.info("enterEveryRule");
+//		Log.debug("enterEveryRule");
 
 	}
 	/**
@@ -196,7 +215,7 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitEveryRule(ParserRuleContext ctx) {
-//		Log.info("exitEveryRule");
+//		Log.debug("exitEveryRule");
 
 	}
 	/**
@@ -205,7 +224,7 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void visitTerminal(TerminalNode node) {
-//		Log.info("visitTerminal");
+//		Log.debug("visitTerminal");
 
 	}
 	/**
@@ -214,7 +233,7 @@ public class CalculatorBaseListener implements CalculatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void visitErrorNode(ErrorNode node) {
-		Log.info("visitErrorNode");
+		Log.debug("visitErrorNode");
 
 	}
 }
