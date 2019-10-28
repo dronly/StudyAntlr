@@ -16,21 +16,23 @@ public class MainApplicaton {
         while (sc.hasNext()) {
             //利用nextXXX()方法输出内容
             str = sc.next();
-//            System.out.println(str);
-
-            InputStream input = new ByteArrayInputStream((str+'\n').getBytes());
+            InputStream input = new ByteArrayInputStream((str + '\n').getBytes());
             ANTLRInputStream inputStream = new ANTLRInputStream(input);
             CalculatorLexer lexer = new CalculatorLexer(inputStream);
             CommonTokenStream tokenStream = new CommonTokenStream(lexer);
 
             CalculatorParser parser = new CalculatorParser(tokenStream);
-//        parser.addParseListener(new CalculatorBaseListener());
-            ParseTree tree = parser.prog();
+//            parser.addParseListener(new CalculatorBaseListener());
 
-            ParseTreeWalker walker = new ParseTreeWalker();
-            walker.walk(new CalculatorBaseListener(), tree);
-            // print LISP-style tree
-//        System.out.println(tree.toStringTree(parser));
+            ParseTree tree = parser.prog();
+//
+//            ParseTreeWalker walker = new ParseTreeWalker();
+//            walker.walk(new CalculatorBaseListener(), tree);
+            CalculatorVisitor visitor = new CalculatorEvalVisitor();
+            Object result = visitor.visit(tree);
+            System.out.println("=" + result.toString());
+
+
         }
 
 
